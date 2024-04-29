@@ -12,7 +12,7 @@ public class ChatThread extends Thread {
     private String nickname;
     private static int roomId = 0;
     private Map<String, PrintWriter> chatClients;
-    private List<String> roomList = new ArrayList<>();
+    private List<String> roomClientList = new ArrayList<>();
     private Map<Integer, List<String>> chatRoom;
     private BufferedReader in;
     PrintWriter out;
@@ -135,13 +135,15 @@ public class ChatThread extends Thread {
         }
     }
     public void createRoom() {
+        List<String> roomList = new ArrayList<>();
         if (chatRoom.isEmpty()) {
             roomId = 1;
         } else if (chatRoom.size() == roomId) {
             ++roomId;
         }
-        String roomName = roomId + "번 방";
+        String roomName = "room " + roomId;
         roomList.add(roomName);
+        roomClientList.add(nickname);
         chatRoom.put(roomId, roomList);
         System.out.println(chatRoom.get(roomId));
         out.println(roomName + "이 생성되었습니다.");
@@ -179,7 +181,7 @@ public class ChatThread extends Thread {
         if (pw != null) {
             pw.println(nickname + "님으로부터 온 귓속말 : "+ message);
         }
-        else {  // pw == null이라면 아이디 잘못 입력한 거
+        else {  // pw == null 이라면 아이디 잘못 입력한 거
             out.println("Error : 수신자 " + whisper + "님을 찾을 수 없습니다.");
         }
     }
